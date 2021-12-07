@@ -196,10 +196,35 @@ const updateUI = function (acc) {
 // Event handlers
 let currentAccount;
 
+// Experementing API
+const now = new Date();
+const options = {
+  hour: 'numeric',
+  minute: 'numeric',
+  day: 'numeric',
+  month: 'long', //'numeric',
+  year: 'numeric',
+  weekday: 'long',
+};
+
+//const locale = navigator.language;
+//console.log(locale);
+
 currentAccount = account1;
 updateUI(currentAccount);
 containerApp.style.opacity = 100;
 
+labelDate.textContent = new Intl.DateTimeFormat(
+  currentAccount.locale,
+  options
+).format(now); //en-US, en-GB(Uk), ar-SY(Syria), iso language code table
+
+//FAKE ALWAYS LOGGED IN
+/*
+currentAccount = account1;
+updateUI(currentAccount);
+containerApp.style.opacity = 100;
+*/
 /*
 const now = new Date();
 const day = `${now.getDate()}`.padStart(2, 0);
