@@ -16,14 +16,14 @@ const account1 = {
   pin: 1111,
 
   movementsDates: [
-    '2019-11-18T21:31:17.178Z',
-    '2019-12-23T07:42:02.383Z',
-    '2020-01-28T09:15:04.904Z',
-    '2020-04-01T10:17:24.185Z',
-    '2020-05-08T14:11:59.604Z',
-    '2020-05-27T17:01:17.194Z',
-    '2020-07-11T23:36:17.929Z',
-    '2020-07-12T10:51:36.790Z',
+    '2021-06-18T21:31:17.178Z',
+    '2021-07-23T07:42:02.383Z',
+    '2021-08-28T09:15:04.904Z',
+    '2021-09-01T10:17:24.185Z',
+    '2021-10-08T14:11:59.604Z',
+    '2021-10-27T17:01:17.194Z',
+    '2021-11-11T23:36:17.929Z',
+    '2021-12-07T10:51:36.790Z',
   ],
   currency: 'EUR',
   locale: 'pt-PT', // de-DE
@@ -81,6 +81,33 @@ const inputClosePin = document.querySelector('.form__input--pin');
 /////////////////////////////////////////////////
 // Functions
 
+const formatMovementDate = function (date) {
+  const calcDaysPassed = (data1, data2) =>
+    Math.round(Math.abs(data2 - data1) / (1000 * 60 * 60 * 24));
+
+  const daysPassed = calcDaysPassed(new Date(), date);
+  console.log(daysPassed);
+
+  if (daysPassed === 0) return 'Today';
+  if (daysPassed === 1) return 'Yesterday';
+  if (daysPassed <= 7) return `${daysPassed} days ago`;
+  else {
+    const day = `${date.getDate()}`.padStart(2, 0);
+    const month = `${date.getMonth() + 1}`.padStart(2, 0);
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  }
+
+  //const date = new Date(acc.movementsDates[i]);
+  //const day = `${date.getDate()}`.padStart(2, 0);
+  //const month = `${date.getMonth() + 1}`.padStart(2, 0);
+  //const year = date.getFullYear();
+  //return `${day}/${month}/${year}`;
+
+  //const calcDaysPassed = (data1, data2) =>
+  //Math.abs(data2 - data1) / (1000 * 60 * 60 * 24); // sec*min*hours*days
+};
+
 const displayMovements = function (acc, sort = false) {
   containerMovements.innerHTML = '';
 
@@ -90,12 +117,17 @@ const displayMovements = function (acc, sort = false) {
 
   movs.forEach(function (mov, i) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
-
     const date = new Date(acc.movementsDates[i]);
+    const displayDate = formatMovementDate(date);
+    /*const date = new Date(acc.movementsDates[i]);
     const day = `${date.getDate()}`.padStart(2, 0);
     const month = `${date.getMonth() + 1}`.padStart(2, 0);
     const year = date.getFullYear();
     const displayDate = `${day}/${month}/${year}`;
+
+    const calcDaysPassed = (data1, data2) =>
+  Math.abs(data2 - data1) / (1000 * 60 * 60 * 24); // sec*min*hours*days
+  */
 
     const html = `
       <div class="movements__row">
@@ -200,8 +232,8 @@ btnLogin.addEventListener('click', function (e) {
     const day = `${now.getDate()}`.padStart(2, 0);
     const month = `${now.getMonth() + 1}`.padStart(2, 0);
     const year = now.getFullYear();
-    const hour = now.getHours();
-    const min = now.getMinutes();
+    const hour = `${now.getHours()}`.padStart(2, 0);
+    const min = `${now.getMinutes()}`.padStart(2, 0);
 
     labelDate.textContent = `${day}/${month}/${year}, ${hour}:${min}`;
 
@@ -412,3 +444,11 @@ console.log(Date.now());
 future.setFullYear(2021);
 console.log(future);
 */
+
+const future = new Date(2021, 10, 19, 15, 23);
+console.log(+future);
+
+const calcDaysPassed = (data1, data2) =>
+  Math.abs(data2 - data1) / (1000 * 60 * 60 * 24); // sec*min*hours*days
+const days1 = calcDaysPassed(new Date(2021, 3, 14), new Date(2021, 3, 3));
+console.log(days1);
