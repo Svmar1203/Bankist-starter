@@ -122,6 +122,11 @@ const displayMovements = function (acc, sort = false) {
     const type = mov > 0 ? 'deposit' : 'withdrawal';
     const date = new Date(acc.movementsDates[i]);
     const displayDate = formatMovementDate(date, acc.locale);
+
+    const formattedMov = new Intl.NumberFormat(acc.locale, {
+      style: 'currency',
+      currency: 'USD',
+    }).format(mov);
     /*const date = new Date(acc.movementsDates[i]);
     const day = `${date.getDate()}`.padStart(2, 0);
     const month = `${date.getMonth() + 1}`.padStart(2, 0);
@@ -138,7 +143,7 @@ const displayMovements = function (acc, sort = false) {
       i + 1
     } ${type}</div>
         <div class="movements__date">${displayDate}</div>
-        <div class="movements__value">${mov.toFixed(2)}€</div>
+        <div class="movements__value">${formattedMov}</div>
       </div>
     `;
 
@@ -480,3 +485,15 @@ const calcDaysPassed = (data1, data2) =>
   Math.abs(data2 - data1) / (1000 * 60 * 60 * 24); // sec*min*hours*days
 const days1 = calcDaysPassed(new Date(2021, 3, 14), new Date(2021, 3, 3));
 console.log(days1);
+
+const num = 388845.23;
+
+const option = {
+  style: 'currency',
+  unit: 'celsius',
+  currency: 'EUR',
+};
+
+console.log('US: ', new Intl.NumberFormat('en-US', option).format(num));
+console.log('Germany: ', new Intl.NumberFormat('de-DE', option).format(num));
+console.log('Syria: ', new Intl.NumberFormat('ar-SY', option).format(num));
