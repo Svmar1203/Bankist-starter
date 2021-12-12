@@ -164,30 +164,30 @@ const displayMovements = function (acc, sort = false) {
 const calcDisplayBalance = function (acc) {
   acc.balance = acc.movements.reduce((acc, mov) => acc + mov, 0);
 
-  labelBalance.textContent = formatCur(incomes, acc.locale, acc.currency);
+  labelBalance.textContent = formatCur(acc.balance, acc.locale, acc.currency);
 };
 
 const calcDisplaySummary = function (acc) {
   const incomes = acc.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => acc + mov, 0);
-  labelSumIn.textContent = formatCur(Math.abs(out), acc.locale, acc.currency);
+  labelSumIn.textContent = formatCur(incomes, acc.locale, acc.currency);
+
+  const out = acc.movements
+    .filter(mov => mov < 0)
+    .reduce((acc, mov) => acc + mov, 0);
+  labelSumOut.textContent = formatCur(Math.abs(out), acc.locale, acc.currency);
+
+  const interest = acc.movements
+    .filter(mov => mov > 0)
+    .map(deposit => (deposit * acc.interestRate) / 100)
+    .filter((int, i, arr) => {
+      // console.log(arr);
+      return int >= 1;
+    })
+    .reduce((acc, int) => acc + int, 0);
+  labelSumInterest.textContent = formatCur(interest, acc.locale, acc.currency);
 };
-
-const out = acc.movements
-  .filter(mov => mov < 0)
-  .reduce((acc, mov) => acc + mov, 0);
-labelSumOut.textContent = formatCur(acc.balance, acc.locale, acc.currency);
-
-const interest = acc.movements
-  .filter(mov => mov > 0)
-  .map(deposit => (deposit * acc.interestRate) / 100)
-  .filter((int, i, arr) => {
-    // console.log(arr);
-    return int >= 1;
-  })
-  .reduce((acc, int) => acc + int, 0);
-labelSumInterest.textContent = formatCur(interest, acc.locale, acc.currency);
 
 const createUsernames = function (accs) {
   accs.forEach(function (acc) {
@@ -327,14 +327,16 @@ btnLoan.addEventListener('click', function (e) {
   const amount = Math.floor(inputLoanAmount.value);
 
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
-    // Add movement
-    currentAccount.movements.push(amount);
+    setTimeout(function () {
+      // Add movement
+      currentAccount.movements.push(amount);
 
-    // Add loan date
-    currentAccount.movementsDates.push(new Date().toISOString());
+      // Add loan date
+      currentAccount.movementsDates.push(new Date().toISOString());
 
-    // Update UI
-    updateUI(currentAccount);
+      // Update UI
+      updateUI(currentAccount);
+    }, 2500);
   }
   inputLoanAmount.value = '';
 });
@@ -508,3 +510,20 @@ const option = {
 console.log('US: ', new Intl.NumberFormat('en-US', option).format(num));
 console.log('Germany: ', new Intl.NumberFormat('de-DE', option).format(num));
 console.log('Syria: ', new Intl.NumberFormat('ar-SY', option).format(num));
+
+const ingredients = ['olives', 'spinach'];
+const pizzaTimer = setTimeout(
+  (ingr1, ingr2) =>
+    console.log(`Here is your pizza 🍕 with ${ingr1} and ${ingr2}`),
+  3000,
+  ...ingredients
+);
+console.log('Waiting...');
+
+//if (ingredients.includes('spinach')) clearTimeout(pizzaTimer);
+
+/*setInterval(function () {
+  const now = new Date();
+  console.log(now);
+}, 3000);
+*/
