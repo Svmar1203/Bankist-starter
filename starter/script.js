@@ -211,6 +211,21 @@ const updateUI = function (acc) {
   calcDisplaySummary(acc);
 };
 
+const startLogOutTimer = function () {
+  // Set time to 5 min
+  let time = 100;
+
+  // Call the timer every second
+  setInterval(function () {
+    //In each call, print the remaining time to UI
+    labelTimer.textContent = time;
+
+    // Decrease 1s
+    //time--; //same as time -1
+    // When 0 second, stop timer and log out user
+  }, 1000);
+};
+
 ///////////////////////////////////////
 // Event handlers
 let currentAccount;
@@ -284,6 +299,8 @@ btnLogin.addEventListener('click', function (e) {
     // Clear input fields
     inputLoginUsername.value = inputLoginPin.value = '';
     inputLoginPin.blur();
+
+    startLogOutTimer();
 
     // Update UI
     updateUI(currentAccount);
@@ -493,6 +510,11 @@ console.log(future);
 
 const future = new Date(2021, 10, 19, 15, 23);
 console.log(+future);
+
+console.log(future.getFullYear());
+console.log(future.getHours());
+console.log(future.getMonth());
+console.log(future.getDay());
 
 const calcDaysPassed = (data1, data2) =>
   Math.abs(data2 - data1) / (1000 * 60 * 60 * 24); // sec*min*hours*days
